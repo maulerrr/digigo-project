@@ -2,9 +2,24 @@ import { Request, Response } from 'express';
 import { Product } from '../models/product.model';
 import { Interaction } from '../models/interaction.model';
 
+
 export const getAllProducts = async (req: Request, res: Response): Promise<void> => {
+  const { category, priceMin, priceMax } = req.query;
+
   try {
-    const products = await Product.find();
+    const query: any = {};
+
+    if (category) {
+      query.category = category;
+    }
+
+    if (priceMin || priceMax) {
+      query.price = {};
+      if (priceMin) query.price.$gte = parseFloat(priceMin as string);
+      if (priceMax) query.price.$lte = parseFloat(priceMax as string);
+    }
+
+    const products = await Product.find(query);
     res.status(200).json(products);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching products', error });

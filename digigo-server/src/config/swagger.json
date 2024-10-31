@@ -1,0 +1,252 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Digigo API",
+      "version": "1.0.0",
+      "description": "API documentation for the Digigo project"
+    },
+    "servers": [
+      {
+        "url": "http://localhost:5000",
+        "description": "Local server"
+      }
+    ],
+    "paths": {
+      "/api/products": {
+        "get": {
+          "summary": "Retrieve a list of products",
+          "parameters": [
+            {
+              "name": "category",
+              "in": "query",
+              "schema": {
+                "type": "string"
+              },
+              "description": "Filter products by category"
+            },
+            {
+              "name": "priceMin",
+              "in": "query",
+              "schema": {
+                "type": "number"
+              },
+              "description": "Minimum price filter"
+            },
+            {
+              "name": "priceMax",
+              "in": "query",
+              "schema": {
+                "type": "number"
+              },
+              "description": "Maximum price filter"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "A list of products",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "name": { "type": "string" },
+                        "description": { "type": "string" },
+                        "category": { "type": "string" },
+                        "price": { "type": "number" },
+                        "image_url": { "type": "string" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "summary": "Create a new product",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": { "type": "string" },
+                    "description": { "type": "string" },
+                    "category": { "type": "string" },
+                    "price": { "type": "number" },
+                    "image_url": { "type": "string" }
+                  },
+                  "required": ["name", "description", "category", "price"]
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Product created successfully"
+            }
+          }
+        }
+      },
+      "/api/products/{id}": {
+        "get": {
+          "summary": "Retrieve a product by ID",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Product details",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "name": { "type": "string" },
+                      "description": { "type": "string" },
+                      "category": { "type": "string" },
+                      "price": { "type": "number" },
+                      "image_url": { "type": "string" }
+                    }
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Product not found"
+            }
+          }
+        },
+        "delete": {
+          "summary": "Delete a product by ID",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Product deleted successfully"
+            },
+            "404": {
+              "description": "Product not found"
+            }
+          }
+        }
+      },
+      "/api/products/purchase": {
+        "post": {
+          "summary": "Purchase a product",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "userId": { "type": "string" },
+                    "productId": { "type": "string" }
+                  },
+                  "required": ["userId", "productId"]
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Product purchased successfully"
+            },
+            "404": {
+              "description": "Product not found"
+            }
+          }
+        }
+      },
+      "/api/interact": {
+        "post": {
+          "summary": "Record an interaction with a product",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "userId": { "type": "string" },
+                    "productId": { "type": "string" },
+                    "type": { "type": "string", "enum": ["view", "like", "purchase"] }
+                  },
+                  "required": ["userId", "productId", "type"]
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Interaction recorded successfully"
+            },
+            "400": {
+              "description": "Bad request - missing userId, productId, or type"
+            }
+          }
+        }
+      },
+      "/api/recommendations": {
+        "get": {
+          "summary": "Retrieve product recommendations for a user",
+          "parameters": [
+            {
+              "name": "userId",
+              "in": "query",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "description": "User ID for generating recommendations"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "List of recommended products",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "name": { "type": "string" },
+                        "description": { "type": "string" },
+                        "category": { "type": "string" },
+                        "price": { "type": "number" },
+                        "image_url": { "type": "string" }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "User ID is required"
+            }
+          }
+        }
+      }
+    }
+  }
+  

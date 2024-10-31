@@ -37,6 +37,16 @@ export const writeInteraction = async (req: Request, res: Response): Promise<voi
     return;
   }
 
+  if (type === 'like') {
+    const existing = await Interaction.findOne({ userId, productId, type: 'like' });
+  
+    if (existing) {
+      await Interaction.deleteOne({ _id: existing._id });
+      res.status(200).json({ message: 'Deleted existing like' });
+      return;
+    }
+  }
+
   try {
     const newInteraction = new Interaction({ userId, productId, type });
     await newInteraction.save();
