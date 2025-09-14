@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import { Product } from '../models/product.model';
 import { Interaction } from '../models/interaction.model';
 
-
 export const getAllProducts = async (req: Request, res: Response): Promise<void> => {
   const { category, priceMin, priceMax } = req.query;
 

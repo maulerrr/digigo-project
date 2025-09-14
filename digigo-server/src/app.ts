@@ -3,20 +3,27 @@ import { json, urlencoded } from 'express';
 import { connectDB } from './config/database';
 import authRoutes from './routes/auth.routes';
 import productRoutes from './routes/product.routes';
+import userRoutes from './routes/user.routes';
 import recommendationRoutes from './routes/recommendation.routes';
 import { errorHandler } from './middleware/error.middleware';
 import swaggerDocument from './config/swagger.json';
 import swaggerUi from 'swagger-ui-express';
 
 const app = express();
+const cors = require('cors');
 
 connectDB();
+
+app.use(cors({
+    origin: 'http://localhost:5173',
+}));
 
 app.use(json());
 app.use(urlencoded({ extended: true }));
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
+app.use('/api/user', userRoutes)
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/recommendations', recommendationRoutes);

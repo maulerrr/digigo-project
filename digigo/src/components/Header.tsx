@@ -1,16 +1,15 @@
-import { globalStyles } from '../assets/styles/globalStyles';
+import React from 'react';
+import { Link } from 'react-router-dom';
 
-const Header = () => {
+const Header: React.FC = () => {
   return (
-    <header className={`p-4 shadow-md ${globalStyles.bgDark}`}>
-      <div className={`${globalStyles.container} flex justify-between items-center`}>
-        <h1 className="text-white text-xl font-bold">Digigo</h1>
+    <header className="bg-[#242827] text-[#fcfcfc] p-4 shadow-md">
+      <div className="container mx-auto w-full flex justify-between items-center">
+        <h1 className="text-2xl font-semibold">Digigo</h1>
         <nav>
-          <ul className="flex space-x-4">
-            <li><a href="/" className="text-white">Home</a></li>
-            <li><a href="/profile" className="text-white">Profile</a></li>
-            <li><a href="/products" className="text-white">Products</a></li>
-          </ul>
+          <Link to="/profile" className="mr-6 text-lg hover:text-[#b5233c]">Profile</Link>
+          <Link to="/products" className="mr-6 text-lg hover:text-[#b5233c]">Products</Link>
+          <Link to="/recommendations" className="text-lg hover:text-[#b5233c]">Special for you</Link>
         </nav>
       </div>
     </header>
